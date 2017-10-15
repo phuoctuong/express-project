@@ -1,6 +1,6 @@
 import Sequelize from 'sequelize';
 import configDB from './config';
-import Log from '../helper/log';
+import log from '../helper/log';
 import initialModel from '../models';
 
 const env = process.env.NODE_ENV || 'development';
@@ -10,19 +10,19 @@ const connect = async (callback) => {
 	const config = configDB[env];
 	sequelize = new Sequelize(config.database, config.username, config.password, {
 		dialect: config.dialect,
-		define: config.define,
+		define: config.define
 	});
 
 	await sequelize.authenticate()
-		.then(response => {
-			Log.info('Connection has been established');
+		.then(() => {
+			log.info('Connection has been established');
 			initialModel(sequelize);
 		})
-		.catch(error => Log.error('Error authentication'));
+		.catch(error => log.error('Error authentication', error.toString()));
 
 	await sequelize.sync({ force: true })
 		.then(() => callback())
-		.catch(error => Log.error('Error sync', error.toString());
+		.catch(error => log.error('Error sync', error.toString()));
 };
 
 export default connect;

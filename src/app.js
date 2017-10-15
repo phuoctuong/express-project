@@ -1,4 +1,5 @@
 import express from 'express';
+import log from './helper/log';
 import connect from './config/connect';
 
 const app = express();
@@ -22,5 +23,4 @@ app.use((err, req, res, next) => {
 		}
 	});
 });
-
-connect(() => app.listen(8080, Log.info('Listening port 8080')));
+connect(() => app.listen(8080, log.info('Listening port 8080')));

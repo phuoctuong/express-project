@@ -1,0 +1,44 @@
+{
+	"parser": "babel-eslint",
+	"plugins": [
+		"import",
+		"flowtype"
+	],
+	 "env": {
+        "node": true,
+        "es6": true
+    },
+	"extends": [
+		"airbnb-base/legacy",
+		"plugin:flowtype/recommended"
+	],
+	"settings": {
+		"flowtype": {
+			"onlyFilesWithFlowAnnotation": true
+		}
+	},
+	"rules": {
+		"import/extensions": 0,
+		"linebreak-style": 0,
+		"no-unused-vars": 1, 
+		"indent": [2, "tab", {"SwitchCase": 1}],
+		"no-tabs": 0,
+		"no-inner-declarations":0,
+		"arrow-body-style": 0,
+		"semi": [2, "always"],
+		"no-multiple-empty-lines": [2, { "max": 1, "maxEOF": 1, "maxBOF": 0 }],
+		"arrow-spacing": 2,
+		"comma-spacing": [2, { "before": false, "after": true }],
+		"comma-dangle": [2, { "functions": "never" }],
+		"quotes": [2, "single"],
+		"max-len": [2, 120, { "ignoreComments": true }],
+		"max-statements-per-line": [2, { "max": 1 }],
+		"eol-last": 0,
+		"eqeqeq": [1, "smart"],
+		"no-prototype-builtins": 0,
+		"class-methods-use-this": 0
+	},
+	"globals": {
+		"document": false
+	}
+}
