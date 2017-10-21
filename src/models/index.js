@@ -5,7 +5,7 @@ const models = {};
 const initialModel = (sequelize) => {
 	fs.readdirSync(path.resolve(process.cwd(), 'src/models'))
 		.filter(file => {
-			return (file.indexOf('.') !== -1 && file != 'index.js');
+			return (file.indexOf('.') !== -1 && file !== 'index.js');
 		})
 		.forEach(file => {
 			let model = sequelize.import(path.resolve(process.cwd(), 'src/models', file));
