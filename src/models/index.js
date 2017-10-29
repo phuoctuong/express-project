@@ -21,4 +21,5 @@ const initialModel = (sequelize) => {
 	return models;
 };
 
+export { models };
 export default initialModel;
