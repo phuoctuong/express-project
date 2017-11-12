@@ -1,9 +1,9 @@
 [ignore]
-	.*/__tests__/**/*.spec.js
+
 [include]
-	./src/**/*.js
+
 [libs]
-	./src/flow-typed/*
+
 [lints]
 
 [options]

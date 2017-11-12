@@ -6,6 +6,7 @@ var gulp = require('gulp'),
 		eslint = require('gulp-eslint'),
 		gutil = require('gulp-util'),
 		clean = require('gulp-clean');
+		flow = require('gulp-flowtype')
 var path = require('path');
 
 var paths = {
@@ -18,7 +19,7 @@ gulp.task('clean', function() {
 				.pipe(clean());
 });
 
-gulp.task('lint', function() {
+gulp.task('lint', ['flow'], function() {
 	return gulp.src(paths.es6)
 				.pipe(plumber())
 				.pipe(eslint())
@@ -26,7 +27,14 @@ gulp.task('lint', function() {
 				.pipe(eslint.failAfterError());
 });
 
-gulp.task('scripts', ['lint'], function() {	
+gulp.task('flow', () => {
+  return gulp.src('src/app.js')
+  .pipe(flow({
+    killFlow: false
+  }));
+});
+
+gulp.task('scripts', ['lint', 'flow'], function() {	
 	return gulp.src('src/**/*.js')
 				.pipe(babel())
 				.pipe(gulp.dest('dist'));
@@ -45,7 +53,7 @@ gulp.task('development', function() {
 		exec: './node_modules/.bin/babel-node',
 		env: {'NODE_ENV': 'development'},
 		watch: 'src/**/*.js',
-		tasks: ['lint'],
+		tasks: 'lint',
 	});
 });
 
