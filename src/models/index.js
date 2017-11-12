@@ -8,7 +8,7 @@ const initialModel = (sequelize) => {
 			return (file.indexOf('.') !== -1 && file !== 'index.js');
 		})
 		.forEach(file => {
-			let model = sequelize.import(path.resolve(process.cwd(), 'src/models', file));
+			const model = sequelize.import(path.resolve(process.cwd(), 'src/models', file));
 			models[model.name] = model;
 		});
 

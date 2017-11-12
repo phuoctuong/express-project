@@ -1,66 +1,43 @@
 // @flow
 
-type TestType = {
-	name: string
-};
+import express from 'express';
+import passport from 'passport';
+import bodyParser from 'body-parser';
+import log from './helper/log';
+import connect from './config/connect';
+import {
+	authRouter,
+	socialRouter
+} from './routes';
 
-const test = (obj: TestType) => {
-	console.log('HELLO');
-};
+const app = express();
 
-test();
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(passport.initialize());
 
-// import express from 'express';
-// import axios from 'axios';
-// import log from './helper/log';
-// import connect from './config/connect';
+app.use('/auth', authRouter, socialRouter);
 
-// type TestType = {
-// 	name: string
-// };
+app.get('/', (req: Request, res: Response) => {
+	res.send('Welcome to Express Server');
+});
 
-// const test = (a: TestType) => {
-// 	console.log('HELLO');
-// };
+// Handle Error
+app.get('*', (req: Request, res: Response) => {
+	res.status(404).json({
+		code: 404,
+		error: true,
+		message: 'Not Found'
+	});
+});
 
-// test();
+app.use((err: ErrorType, req: Request, res: Response, next: Next) => {
+	const code = err.status || 500;
+	res.status(code).json({
+		code,
+		erorr: true,
+		message: err.message || 'Something broken'
+	});
+});
 
-// const app = express();
-
-// app.get('/', (req, res) => {
-// 	res.send('Welcome to Express Server');
-// });
-
-// app.get('/test', (req, res) => {
-// 	axios.post('https://www.netflix.com/api/shakti/386236be/account/playbackprefs', {
-// 		authURL: '1508550696557.XEcxgQYkSaznw7ulYLv6fdGVNaU=',
-// 		autoplay: true,
-// 		videoQuality: 'EconomyStreams'
-// 	}, {
-// 		withCredentials: true
-// 	})
-// 		.then((response) => {
-// 			console.log('Completely', response);
-// 		})
-// 		.catch((error) => {
-// 			console.log('Erorr', error);
-// 		});
-// 	res.send('OK');
-// });
-
-// // Handle Error
-// app.get('*', (req, res, next) => {
-// 	const err = new Error();
-// 	err.status(404);
-// 	next(err);
-// });
-
-// app.use((err, req, res, next) => {
-// 	res.status(404).json({
-// 		error: true,
-// 		data: {
-// 			message: err.message || 'Something broken'
-// 		}
-// 	});
-// });
-// connect(() => app.listen(8080, log.info('Listening port 8080')));
+connect(() => app.listen(8080, log.info('Listening port 8080')));

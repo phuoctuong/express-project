@@ -3,9 +3,9 @@
 import express from 'express';
 import { userProfileDAO } from '../daos';
 
-let router = express.Router();
+const router = express.Router();
 
-router.post('/', (req, res) => {
+router.post('/', (req: Request, res: Response) => {
 	const userProfile = req.body;
 
 	userProfileDAO.create(userProfile)

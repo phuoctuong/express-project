@@ -11,7 +11,7 @@ const config = {
 			freezeTableName: true,
 			timestamps: true,
 			paranoid: true,
-			underscore: true
+			underscored: true
 		}
 	},
 	test: {
@@ -24,7 +24,7 @@ const config = {
 			freezeTableName: true,
 			timestamps: true,
 			paranoid: true,
-			underscore: true
+			underscored: true
 		}
 	},
 	production: {
@@ -37,7 +37,7 @@ const config = {
 			freezeTableName: true,
 			timestamps: true,
 			paranoid: true,
-			underscore: true
+			underscored: true
 		}
 	}
 };

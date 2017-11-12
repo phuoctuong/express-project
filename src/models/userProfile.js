@@ -1,5 +1,5 @@
 export default (sequelize, DataTypes) => {
-	let UserProfile = sequelize.define('userProfile', {
+	const UserProfile = sequelize.define('userProfile', {
 		id: {
 			type: DataTypes.BIGINT,
 			unique: true,
@@ -14,6 +14,14 @@ export default (sequelize, DataTypes) => {
 		lastName: {
 			type: DataTypes.STRING,
 			field: 'last_name'
+		},
+		profileImg: {
+			type: DataTypes.STRING,
+			field: 'profile_img'
+		},
+		gender: {
+			type: DataTypes.STRING,
+			field: 'gender'
 		}
 	}, {
 		tableName: 'user_profile'
