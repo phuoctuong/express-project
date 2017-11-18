@@ -5,9 +5,9 @@ const auth = {
 		expiresIn: '1h'
 	},
 	googleAuth: {
-		clientID: '',
-		clientSecret: '',
-		callbackURL: ''
+		clientID: '450932602522-i0brqmv58lto09ptv8t4jlsrr1togr3s.apps.googleusercontent.com', //eslint-disable-line
+		clientSecret: 'z6yAc56fTxL5aQCweG4MIyXs',
+		callbackURL: 'http://localhost:8080/auth/google/callback'
 	},
 	facebookAuth: {
 		clientID: '714333155432593',

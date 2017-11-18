@@ -6,12 +6,12 @@
   "scripts": {
     "seq:debug": "DEBUG=sequelize:sql:pg babel-node src/app.js",
     "express:debug": "DEBUG=express:* babel-node src/app.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "gulp development",
     "prestart": "gulp production",
     "start": "cross-env NODE_ENV=production node ./dist/app.js",
     "flow": "flow",
-    "lint": "eslint"
+    "lint": "eslint",
+    "test": "jest"
   },
   "keywords": [],
   "author": "",
@@ -33,6 +33,7 @@
     "eslint-plugin-flowtype": "2.35.0",
     "eslint-plugin-import": "^2.7.0",
     "flow-bin": "^0.56.0",
+    "jest": "^21.2.1",
     "nodemon": "^1.12.1",
     "rimraf": "^2.6.2",
     "system-sleep": "^1.3.6"
@@ -60,6 +61,7 @@
     "lodash": "^4.17.4",
     "passport": "^0.4.0",
     "passport-facebook": "^2.1.1",
+    "passport-google-oauth": "^1.0.0",
     "pg": "^6.1.0",
     "pg-hstore": "^2.3.2",
     "sequelize": "^4.11.0",

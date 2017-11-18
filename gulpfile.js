@@ -21,7 +21,11 @@ gulp.task('clean', () => {
 
 gulp.task('lint', () => {
 	return gulp.src(paths.es6)
-		.pipe(plumber())
+		.pipe(plumber({
+			errorHandler: function handler(error) {
+				this.emit('end');
+			}
+		}))
 		.pipe(eslint())
 		.pipe(eslint.format())
 		.pipe(eslint.failAfterError());
