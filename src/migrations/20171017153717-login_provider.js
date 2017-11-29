@@ -1,5 +1,3 @@
-'use strict';
-
 module.exports = {
 	up: (queryInterface, Sequelize) => {
 		return queryInterface.createTable('login_provider', {
@@ -9,14 +7,18 @@ module.exports = {
 				autoIncrement: true,
 				primaryKey: true
 			},
+			social_id: {
+				type: Sequelize.STRING,
+				unique: true
+			},
 			access_token: {
 				type: Sequelize.STRING
 			},
 			refresh_token: {
 				type: Sequelize.STRING
 			},
-			provider_id: {
-				type: Sequelize.DATE
+			provider: {
+				type: Sequelize.STRING
 			},
 			expires_in_access: {
 				type: Sequelize.DATE
@@ -39,7 +41,7 @@ module.exports = {
 		});
 	},
 
-	down: (queryInterface, Sequelize) => {
+	down: (queryInterface) => {
 		return queryInterface.dropTable('login_provider');
 	}
 };

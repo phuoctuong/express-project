@@ -1,11 +1,16 @@
 export default (sequelize, DataTypes) => {
-	let LoginProvider = sequelize.define('loginProvider', {
+	const LoginProvider = sequelize.define('loginProvider', {
 		id: {
 			type: DataTypes.BIGINT,
 			unique: true,
 			primaryKey: true,
 			autoIncrement: true,
 			field: 'id'
+		},
+		socialId: {
+			type: DataTypes.STRING,
+			unique: true,
+			field: 'social_id'
 		},
 		accessToken: {
 			type: DataTypes.STRING,
@@ -15,9 +20,9 @@ export default (sequelize, DataTypes) => {
 			type: DataTypes.STRING,
 			field: 'refresh_token'
 		},
-		providerId: {
+		provider: {
 			type: DataTypes.STRING,
-			field: 'provider_id'
+			field: 'provider'
 		},
 		expiresInAccess: {
 			type: DataTypes.DATE,
