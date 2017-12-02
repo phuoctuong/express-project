@@ -6,9 +6,12 @@ import { models } from '../models';
 
 const userAccountDAO = {};
 
-userAccountDAO.findById = (id: number) => {
+userAccountDAO.findById = (id: number, options: Object) => {
 	return new Promise((resolve, reject) => {
-		models.userAccount.findById(id)
+		models.userAccount.findById(id, {
+			attributes: ['email', 'activated', 'status'],
+			...options
+		})
 			.then(result => resolve(result))
 			.catch(error => reject(error));
 	});

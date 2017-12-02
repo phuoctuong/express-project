@@ -59,5 +59,21 @@ export default (sequelize, DataTypes) => {
 		});
 	};
 
+	UserAccount.loadScope = (models) => {
+		UserAccount.addScope('defaultScope', {
+			include: [
+				{
+					model: models.userProfile,
+					as: 'UserProfile'
+				},
+				{
+					model: models.loginProvider,
+					as: 'LoginProvider',
+					attributes: ['id', 'provider']
+				}
+			]
+		}, { override: true });
+	};
+
 	return UserAccount;
 };

@@ -1,3 +1,5 @@
+import { GENDER } from '../constants';
+
 export default (sequelize, DataTypes) => {
 	const UserProfile = sequelize.define('userProfile', {
 		id: {
@@ -21,7 +23,8 @@ export default (sequelize, DataTypes) => {
 		},
 		gender: {
 			type: DataTypes.STRING,
-			field: 'gender'
+			field: 'gender',
+			validate: [GENDER]
 		}
 	}, {
 		tableName: 'user_profile'

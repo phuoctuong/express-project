@@ -1,3 +1,5 @@
+import { PROVIDER } from '../constants';
+
 export default (sequelize, DataTypes) => {
 	const LoginProvider = sequelize.define('loginProvider', {
 		id: {
@@ -22,7 +24,10 @@ export default (sequelize, DataTypes) => {
 		},
 		provider: {
 			type: DataTypes.STRING,
-			field: 'provider'
+			field: 'provider',
+			validate: {
+				isIn: [PROVIDER]
+			}
 		},
 		expiresInAccess: {
 			type: DataTypes.DATE,
