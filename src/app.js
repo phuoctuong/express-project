@@ -7,7 +7,8 @@ import log from './helper/log';
 import connect from './config/connect';
 import {
 	authRouter,
-	socialRouter
+	socialRouter,
+	userRouter
 } from './routes';
 
 const app = express();
@@ -17,6 +18,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(passport.initialize());
 
 app.use('/auth', authRouter, socialRouter);
+app.use('/api/users', userRouter);
 
 app.get('/', (req: Request, res: Response) => {
 	res.send('Welcome to Express Server');

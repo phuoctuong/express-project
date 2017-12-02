@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import { mapKeys, camelCase } from 'lodash';
 
 const models = {};
 const initialModel = (sequelize) => {
@@ -16,6 +17,15 @@ const initialModel = (sequelize) => {
 		if (models[modelName].hasOwnProperty('associate')) {
 			models[modelName].associate(models);
 		}
+		if (models[modelName].hasOwnProperty('loadScope')) {
+			models[modelName].loadScope(models);
+		}
+
+		models[modelName].prototype.toJSON = function () {
+			return mapKeys(this.get(), (value, key) => {
+				return camelCase(key);
+			});
+		};
 	});
 
 	return models;
