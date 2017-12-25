@@ -28,3 +28,15 @@ declare type LoginProvider = {
     expiresInAccess: any,
     expiresInRefresh: any,
 };
+
+declare type Post = {
+    id: number,
+    title: string,
+};
+
+declare type Comment = {
+    id: number,
+    commentable: string,
+    commentableId: number,
+    userAccountId: number,
+};

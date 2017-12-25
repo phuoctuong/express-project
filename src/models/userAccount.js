@@ -60,7 +60,7 @@ export default (sequelize, DataTypes) => {
 	};
 
 	UserAccount.loadScope = (models) => {
-		UserAccount.addScope('defaultScope', {
+		UserAccount.addScope('detail', {
 			include: [
 				{
 					model: models.userProfile,

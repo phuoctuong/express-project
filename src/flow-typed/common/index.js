@@ -14,3 +14,8 @@ declare type ProviderType =
     | 'facebook'
     | 'google'
     | 'twitter'
+
+declare type SocketPayloadType = {
+    tpye?: string,
+    payload?: Object
+};
