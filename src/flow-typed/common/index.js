@@ -16,6 +16,6 @@ declare type ProviderType =
     | 'twitter'
 
 declare type SocketPayloadType = {
-    tpye?: string,
+    type?: string,
     payload?: Object
 };

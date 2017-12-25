@@ -39,7 +39,7 @@ const onConnect = (socket) => {
 		log.info(`ClientId ${socket.payload.userId} left room`);
 	});
 
-	socket.on('broadcast', (data) => {
+	socket.on('broadcast', (data: SocketPayloadType) => {
 		socket.broadcast.to(socket.payload.room).emit('broadcast', data);
 	});
 

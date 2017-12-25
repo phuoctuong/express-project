@@ -16,7 +16,6 @@ import {
 
 const app = express();
 
-app.use(express.static(path.join(process.cwd(), '/node_modules')));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(passport.initialize());
@@ -27,10 +26,6 @@ app.use('/api/posts', postRouter);
 
 app.get('/', (req: Request, res: Response) => {
 	res.send('Welcome to our word!');
-});
-
-app.get('/home', (req: Request, res: Response) => {
-	res.sendFile(path.join(process.cwd(), 'index.html'));
 });
 
 // Handle Error
