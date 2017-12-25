@@ -8,7 +8,7 @@ const userAccountDAO = {};
 
 userAccountDAO.findById = (id: number, options: Object) => {
 	return new Promise((resolve, reject) => {
-		models.userAccount.findById(id, {
+		models.userAccount.scope('detail').findById(id, {
 			attributes: ['email', 'activated', 'status'],
 			...options
 		})
@@ -19,7 +19,7 @@ userAccountDAO.findById = (id: number, options: Object) => {
 
 userAccountDAO.findBy = (attrs: Object) => {
 	return new Promise((resolve, reject) => {
-		models.userAccount.findAll({ where: attrs })
+		models.userAccount.scope('detail').findAll({ where: attrs })
 			.then(result => resolve(result))
 			.catch(error => reject(error));
 	});
@@ -27,7 +27,7 @@ userAccountDAO.findBy = (attrs: Object) => {
 
 userAccountDAO.findOneBy = (attrs: Object) => {
 	return new Promise((resolve, reject) => {
-		models.userAccount.findOne({ where: attrs })
+		models.userAccount.scope('detail').findOne({ where: attrs })
 			.then(result => resolve(result))
 			.catch(error => reject(error));
 	});

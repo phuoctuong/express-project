@@ -40,5 +40,6 @@ export default (sequelize, DataTypes) => {
 	}, {
 		tableName: 'login_provider'
 	});
+
 	return LoginProvider;
 };
