@@ -12,28 +12,23 @@ Sequelize.useCLS(namespace); // used for passing transactions automatically
 const env = process.env.NODE_ENV || 'development';
 
 const connect = async (callback) => {
-	const config = configDB[env];
-	sequelize = new Sequelize(config.database, config.username, config.password, {
-		dialect: config.dialect,
-		define: config.define,
-		logging: seqlizeLog,
-		operatorsAliases: false
-	});
-
-	await sequelize.authenticate()
-		.then(() => {
-			initialModel(sequelize);
-			log.info('Connection has been established');
-		})
-		.catch(error => {
-			log.error('Error authentication', error.toString());
+	try {
+		const config = configDB[env];
+		sequelize = new Sequelize(config.database, config.username, config.password, {
+			dialect: config.dialect,
+			define: config.define,
+			logging: seqlizeLog,
+			operatorsAliases: false
 		});
-
-	await sequelize.sync({ force: false })
-		.then(() => callback())
-		.catch(error => {
-			log.error('Error sync', error.toString());
+		await sequelize.authenticate();
+		initialModel(sequelize);
+		await sequelize.sync({
+			force: env === 'test'
 		});
+		callback();
+	} catch (error) {
+		log.error('Error Connection', error.toString());
+	}
 };
 
 export { sequelize };
