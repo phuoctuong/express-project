@@ -46,7 +46,11 @@ app.use((err: ErrorType, req: Request, res: Response, next: Next) => {
 	});
 });
 
-connect(() => {
-	app.listen(8080, () => log.info('Listening server port 8080'));
-	io.listen(3000);
-});
+if (process.env.NODE_ENV !== 'test') {
+	connect(() => {
+		app.listen(8080, () => log.info('Listening server port 8080'));
+		io.listen(3000);
+	});
+}
+
+export default app;

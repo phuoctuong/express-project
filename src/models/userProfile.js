@@ -24,7 +24,9 @@ export default (sequelize, DataTypes) => {
 		gender: {
 			type: DataTypes.STRING,
 			field: 'gender',
-			validate: [GENDER]
+			validate: {
+				isIn: [GENDER]
+			}
 		}
 	}, {
 		tableName: 'user_profile'
