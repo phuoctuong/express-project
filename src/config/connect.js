@@ -1,7 +1,7 @@
 import Sequelize from 'sequelize';
 import cls from 'continuation-local-storage';
 import configDB from './db';
-import log from '../helper/log';
+import logger from '../helper/logger';
 import seqlizeLog from '../helper/seqlizeLog';
 import initialModel from '../models';
 
@@ -27,7 +27,7 @@ const connect = async (callback) => {
 		});
 		callback();
 	} catch (error) {
-		log.error('Error Connection', error.toString());
+		logger.error(`Error Connection ${error.toString()}`);
 	}
 };
 

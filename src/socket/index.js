@@ -1,7 +1,7 @@
 // @flow
 
 import Server from 'socket.io';
-import log from '../helper/log';
+import logger from '../helper/logger';
 import { verifyJWT } from '../helper/jwt';
 
 const io = new Server({
@@ -15,7 +15,7 @@ io.use((socket, next) => {
 		socket.payload = { userId: id };
 		next();
 	} catch (error) {
-		log.info('Error', error.toString());
+		logger.error(`Socket Error: ${error.toString()}`);
 		next(new Error('Authenticated Failed'));
 	}
 });
@@ -28,15 +28,15 @@ const onConnect = (socket) => {
 					...socket.payload,
 					room
 				};
-				log.info(`ClientId ${socket.payload.userId} joined room successfully`);
+				logger.info(`Socket ClientId ${socket.payload.userId} joined room successfully`);
 			});
 		}
-		log.info(`ClientId ${socket.payload.userId} connected`);
+		logger.info(`Socket ClientId ${socket.payload.userId} connected`);
 	});
 
 	socket.on('leave', () => {
 		socket.leave();
-		log.info(`ClientId ${socket.payload.userId} left room`);
+		logger.info(`Socket ClientId ${socket.payload.userId} left room`);
 	});
 
 	socket.on('broadcast', (data: SocketPayloadType) => {
@@ -44,11 +44,11 @@ const onConnect = (socket) => {
 	});
 
 	socket.on('disconnect', () => {
-		log.info(`ClientId ${socket.payload.userId} disconnected`);
+		logger.info(`Socket ClientId ${socket.payload.userId} disconnected`);
 	});
 
 	socket.on('error', (error) => {
-		log.error(`Error from ${socket.payload.userId}`, error.toString());
+		logger.error(`Socket Error from ${socket.payload.userId}: ${error.toString()}`);
 	});
 };
 

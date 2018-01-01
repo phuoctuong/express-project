@@ -7,6 +7,7 @@ import passportGG from 'passport-google-oauth';
 import configAuth from '../config/auth';
 import { userAccountDAO } from '../daos';
 import { signJWT } from '../helper/jwt';
+import logger from '../helper/logger';
 
 const FacebookStrategy = passportFB.Strategy;
 const GoogleStrategy = passportGG.OAuth2Strategy;
@@ -15,6 +16,7 @@ const router = express.Router();
 passport.use(new FacebookStrategy({
 	...configAuth.facebookAuth
 }, async (accessToken, refreshToken, profile, done) => {
+	logger.info('Passport Facebook');
 	try {
 		const { id, name, gender, emails, photos } = profile;
 
@@ -43,13 +45,22 @@ passport.use(new FacebookStrategy({
 			id: rs[0].id,
 			provider: 'facebook'
 		});
+		const refToken = signJWT({
+			id: rs[0].id,
+			provider: 'facebook'
+		}, '7d');
+
 		await rs[0].update({
 			token,
 			status: true
 		});
 
-		return done(null, { token });
+		return done(null, {
+			token,
+			refreshToken: refToken
+		});
 	} catch (error) {
+		logger.error(`Passport Facebook Error ${error.toString()}`);
 		return done(error);
 	}
 }));
@@ -57,6 +68,7 @@ passport.use(new FacebookStrategy({
 passport.use(new GoogleStrategy({
 	...configAuth.googleAuth
 }, async (accessToken, refreshToken, profile, done) => {
+	logger.info('Passport Google');
 	try {
 		const { id, name, gender, emails, photos } = profile;
 
@@ -73,7 +85,7 @@ passport.use(new GoogleStrategy({
 				profileImg: photos[0] ? photos[0].value : null
 			},
 			LoginProvider: {
-				socialID: id,
+				socialId: id,
 				accessToken,
 				refreshToken: refreshToken || null,
 				provider: 'google'
@@ -85,13 +97,22 @@ passport.use(new GoogleStrategy({
 			id: rs[0].id,
 			provider: 'google'
 		});
+		const refToken = signJWT({
+			id: rs[0].id,
+			provider: 'google'
+		});
+
 		await rs[0].update({
 			token,
 			status: true
 		});
 
-		return done(null, { token });
+		return done(null, {
+			token,
+			refreshToken: refToken
+		});
 	} catch (error) {
+		logger.error(`Passport Google ${error.toString()}`);
 		return done(error);
 	}
 }));
@@ -115,6 +136,7 @@ router.get('/facebook/callback', passport.authenticate('facebook', {
 });
 
 router.get('/facebook/callback_error', (req: Request, res: Response) => {
+	logger.error('Passport Facebook Callback Error');
 	res.status(401).json({
 		code: 401,
 		error: true,
@@ -141,6 +163,7 @@ router.get('/google/callback', passport.authenticate('google', {
 });
 
 router.get('/google/callback_error', (req: Request, res: Response) => {
+	logger.error('Passport Google Callback Error');
 	res.status(401).json({
 		code: 401,
 		error: true,

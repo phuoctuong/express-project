@@ -2,7 +2,7 @@
 
 import fs from 'fs';
 import path from 'path';
-import log from './log';
+import logger from './logger';
 
 const seqlizeLog = (message: string) => {
 	const writeStream = fs.createWriteStream(path.resolve(process.cwd(), 'scripts.txt'), {
@@ -10,7 +10,7 @@ const seqlizeLog = (message: string) => {
 	});
 	writeStream.write(message, 'UTF8');
 	writeStream.end('\n');
-	writeStream.on('error', error => log.error(error.stack));
+	writeStream.on('error', error => logger.error(error.stack));
 };
 
 export default seqlizeLog;

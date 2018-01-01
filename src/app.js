@@ -3,10 +3,9 @@
 import express from 'express';
 import passport from 'passport';
 import bodyParser from 'body-parser';
-import path from 'path';
-import log from './helper/log';
 import connect from './config/connect';
 import io from './socket';
+import logger from './helper/logger';
 import {
 	authRouter,
 	socialRouter,
@@ -48,7 +47,9 @@ app.use((err: ErrorType, req: Request, res: Response, next: Next) => {
 
 if (process.env.NODE_ENV !== 'test') {
 	connect(() => {
-		app.listen(8080, () => log.info('Listening server port 8080'));
+		app.listen(8080, () => {
+			logger.info('Listening server port 8080');
+		});
 		io.listen(3000);
 	});
 }
