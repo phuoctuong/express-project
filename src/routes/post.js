@@ -1,13 +1,14 @@
 // @flow
 
 import express from 'express';
-import log from '../helper/log';
+import logger from '../helper/logger';
 import { postDAO } from '../daos';
 import { authMiddleware } from './middleware';
 
 const router = express.Router();
 
 router.get('/:id', authMiddleware, async (req: Request, res: Response) => {
+	logger.info(`Post Router: GET /${req.params.id}`);
 	try {
 		const rs = await postDAO.findById(req.params.id, {});
 
@@ -17,7 +18,7 @@ router.get('/:id', authMiddleware, async (req: Request, res: Response) => {
 			data: rs
 		});
 	} catch (error) {
-		log.error('Post Router', error.toString());
+		logger.error(`Post Router ${error.toString()}`);
 		res.status(500).json({
 			code: 500,
 			error: true,
@@ -27,6 +28,7 @@ router.get('/:id', authMiddleware, async (req: Request, res: Response) => {
 });
 
 router.post('/', authMiddleware, async (req: Request, res: Response) => {
+	logger.info('Post Router: POST /');
 	try {
 		const post = {
 			title: req.body.title
@@ -38,7 +40,7 @@ router.post('/', authMiddleware, async (req: Request, res: Response) => {
 			data: rs
 		});
 	} catch (error) {
-		log.error('Post Router', error.toString());
+		logger.error(`Post Router: POST ${error.toString()}`);
 		res.status(500).json({
 			code: 500,
 			error: true,
@@ -48,6 +50,7 @@ router.post('/', authMiddleware, async (req: Request, res: Response) => {
 });
 
 router.post('/:id/comment', authMiddleware, async (req: Request, res: Response) => {
+	logger.info(`Post Router: POST /${req.params.id}/comment`);
 	try {
 		const post = await postDAO.findById(req.params.id, {});
 		const rs = await post.createComment({
@@ -61,7 +64,7 @@ router.post('/:id/comment', authMiddleware, async (req: Request, res: Response) 
 			data: rs
 		});
 	} catch (error) {
-		log.error('Post Router', error.toString());
+		logger.error(`Post Router: POST /:id/comment ${error.toString()}`);
 		res.status(500).json({
 			code: 500,
 			error: true,

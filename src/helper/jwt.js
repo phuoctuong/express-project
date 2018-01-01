@@ -3,11 +3,11 @@
 import jwt from 'jsonwebtoken';
 import auth from '../config/auth';
 
-const signJWT = (obj: any) => {
+const signJWT = (obj: any, expiresTime: string = auth.basicAuth.expiresIn) => {
 	return jwt.sign({
 		data: obj
 	}, auth.basicAuth.secretOrKey, {
-		expiresIn: auth.basicAuth.expiresIn,
+		expiresIn: expiresTime,
 		algorithm: auth.basicAuth.algorithm
 	});
 };

@@ -1,6 +1,7 @@
 // @flow
 
 import express from 'express';
+import logger from '../helper/logger';
 import { userAccountDAO } from '../daos';
 import { authMiddleware } from './middleware';
 import { signJWT } from '../helper/jwt';
@@ -9,7 +10,28 @@ import { UNIQUE_VIOLATION } from '../constants';
 
 const router = express.Router();
 
+router.post('/token', authMiddleware, async (req: Request, res: Response) => {
+	logger.info('Auth Router: POST /token');
+	const { id } = res.locals.user;
+	const token = signJWT({
+		id
+	});
+	const refreshToken = signJWT({
+		id
+	}, '7d');
+
+	res.status(200).json({
+		code: 200,
+		error: false,
+		data: {
+			token,
+			refreshToken
+		}
+	});
+});
+
 router.post('/logout', authMiddleware, async (req: Request, res: Response) => {
+	logger.info('Auth Router: POST /logout');
 	try {
 		const { id } = res.locals.user;
 		const rs = await userAccountDAO.update({ status: false }, {
@@ -31,6 +53,7 @@ router.post('/logout', authMiddleware, async (req: Request, res: Response) => {
 			});
 		}
 	} catch (error) {
+		logger.error(`Auth Router: POST /logout ${error.toString()}`);
 		res.status(401).json({
 			code: 401,
 			error: true,
@@ -40,6 +63,7 @@ router.post('/logout', authMiddleware, async (req: Request, res: Response) => {
 });
 
 router.post('/login', async (req: Request, res: Response) => {
+	logger.info('Auth Router: POST /login');
 	try {
 		if (!req.body.email || !req.body.password) {
 			res.status(400).json({
@@ -55,6 +79,9 @@ router.post('/login', async (req: Request, res: Response) => {
 		const token = signJWT({
 			id: userAccount.get('id')
 		});
+		const refreshToken = signJWT({
+			id: userAccount.get('id')
+		}, '7d');
 
 		await userAccount.update({
 			token,
@@ -66,10 +93,12 @@ router.post('/login', async (req: Request, res: Response) => {
 			error: false,
 			data: {
 				token,
+				refreshToken,
 				message: 'Login Successfully'
 			}
 		});
 	} catch (error) {
+		logger.error(`Auth Router: POST /logout ${error.toString()}`);
 		res.status(401).json({
 			code: 401,
 			error: true,
@@ -79,6 +108,7 @@ router.post('/login', async (req: Request, res: Response) => {
 });
 
 router.post('/signup', async (req: Request, res: Response) => {
+	logger.info('Auth Router: POST /signup');
 	if (!req.body.email || !req.body.password) {
 		res.status(400).json({
 			code: 400,
@@ -109,6 +139,7 @@ router.post('/signup', async (req: Request, res: Response) => {
 			}
 		});
 	} catch (error) {
+		logger.error(`Auth Router: POST /signup ${error.toString()}`);
 		const { errors } = error;
 		let message = 'Something broken';
 
