@@ -24,7 +24,7 @@ app.use('/api/users', userRouter);
 app.use('/api/posts', postRouter);
 
 app.get('/', (req: Request, res: Response) => {
-	res.send('Welcome to our word!');
+	res.send('Welcome to our app');
 });
 
 // Handle Error

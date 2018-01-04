@@ -1,6 +1,11 @@
 require('dotenv').config();
 
 const config = {
+	redis: {
+		password: process.env.REDIS_PASSWORD,
+		host: 'localhost',
+		port: 6379
+	},
 	development: {
 		username: process.env.DB_USERNAME,
 		password: process.env.DB_PASSWORD,
