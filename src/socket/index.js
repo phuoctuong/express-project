@@ -21,6 +21,10 @@ io.use((socket, next) => {
 });
 
 const onConnect = (socket) => {
+	socket.on('connect', () => {
+		logger.info(`Socket Client ${socket.id} connected`);
+	});
+
 	socket.on('join', (room: string) => {
 		if (room) {
 			socket.join(room, () => {
@@ -28,7 +32,7 @@ const onConnect = (socket) => {
 					...socket.payload,
 					room
 				};
-				logger.info(`Socket ClientId ${socket.payload.userId} joined room successfully`);
+				logger.info(`Socket ${socket.id} - ClientId ${socket.payload.userId} joined room successfully`);
 			});
 		}
 		logger.info(`Socket ClientId ${socket.payload.userId} connected`);

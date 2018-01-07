@@ -3,7 +3,7 @@ import cls from 'continuation-local-storage';
 import configDB from './db';
 import logger from '../helper/logger';
 import seqlizeLog from '../helper/seqlizeLog';
-import initialModel from '../models';
+import { initialModel } from '../models';
 
 let sequelize;
 const namespace = cls.createNamespace('own-namespace');
@@ -27,7 +27,7 @@ const connect = async (callback) => {
 		});
 		callback();
 	} catch (error) {
-		logger.error(`Error Connection ${error.toString()}`);
+		logger.error(`Error Connection ${error}`);
 	}
 };
 

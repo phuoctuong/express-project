@@ -3,9 +3,10 @@
 import express from 'express';
 import passport from 'passport';
 import bodyParser from 'body-parser';
+import http from 'http';
+import log from 'fancy-log';
 import connect from './config/connect';
 import io from './socket';
-import logger from './helper/logger';
 import {
 	authRouter,
 	socialRouter,
@@ -14,6 +15,7 @@ import {
 } from './routes';
 
 const app = express();
+const server = http.createServer(app);
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -47,10 +49,10 @@ app.use((err: ErrorType, req: Request, res: Response, next: Next) => {
 
 if (process.env.NODE_ENV !== 'test') {
 	connect(() => {
-		app.listen(8080, () => {
-			logger.info('Listening server port 8080');
+		io.listen(server);
+		server.listen(8080, () => {
+			log('Listening server port 8080');
 		});
-		io.listen(3000);
 	});
 }
 

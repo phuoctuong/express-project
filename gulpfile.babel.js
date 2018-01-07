@@ -3,7 +3,7 @@ const gulp = require('gulp'),
 	nodemon = require('gulp-nodemon'),
 	babel = require('gulp-babel'),
 	eslint = require('gulp-eslint'),
-	gutil = require('gulp-util'),
+	log = require('fancy-log'),
 	clean = require('gulp-clean'),
 	flow = require('gulp-flowtype'),
 	sequence = require('gulp-sequence');
@@ -57,13 +57,13 @@ gulp.task('build_dev', () => {
 });
 
 gulp.task('production', ['build_prod'], () => {
-	gutil.log('Bundle Successfully');
+	log('Bundle Successfully');
 });
 
 gulp.task('development', () => {
 	sequence(['lint', 'flow'], 'build_dev', (err) => {
 		if (err) {
-			gutil.log('Run Dev Failed');
+			log('Run Dev Failed');
 		}
 	});
 });

@@ -4,12 +4,12 @@ import { mapKeys, camelCase } from 'lodash';
 
 const models = {};
 const initialModel = (sequelize) => {
-	fs.readdirSync(path.resolve(process.cwd(), 'src/models'))
+	fs.readdirSync(path.resolve(__dirname))
 		.filter(file => {
 			return (file.indexOf('.') !== -1 && file !== 'index.js');
 		})
 		.forEach(file => {
-			const model = sequelize.import(path.resolve(process.cwd(), 'src/models', file));
+			const model = sequelize.import(path.resolve(__dirname, file));
 			models[model.name] = model;
 		});
 
@@ -31,5 +31,4 @@ const initialModel = (sequelize) => {
 	return models;
 };
 
-export { models };
-export default initialModel;
+export { models, initialModel };
