@@ -18,6 +18,8 @@
   },
   "scripts": {
     "dev": "gulp development",
+    "predocker": "sequelize db:migrate --env docker",
+    "docker": "gulp docker",
     "dev:seq:debug": "DEBUG=sequelize:sql:pg cross-env=development babel-node src/app.js",
     "dev:debug": "DEBUG=express:* cross-env=development babel-node src/app.js",
     "prestart": "gulp production",

@@ -44,6 +44,19 @@ const config = {
 			paranoid: true,
 			underscored: true
 		}
+	},
+	docker: {
+		username: process.env.DB_USERNAME,
+		password: process.env.DB_PASSWORD,
+		dialect: process.env.DB_DIALECT,
+		database: `${process.env.DB_NAME}_docker`,
+		host: 'db',
+		define: {
+			freezeTableName: true,
+			timestamps: true,
+			paranoid: true,
+			underscored: true
+		}
 	}
 };
 
