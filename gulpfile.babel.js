@@ -52,7 +52,17 @@ gulp.task('build_dev', () => {
 		exec: './node_modules/.bin/babel-node',
 		env: { NODE_ENV: 'development' },
 		watch: paths.es6,
-		tasks: 'lint'
+		tasks: ['lint', 'flow']
+	});
+});
+
+gulp.task('build_docker', () => {
+	nodemon({
+		script: 'src/app.js',
+		exec: './node_modules/.bin/babel-node',
+		env: { NODE_ENV: 'docker' },
+		watch: paths.es6,
+		tasks: ['lint', 'flow']
 	});
 });
 
@@ -64,6 +74,14 @@ gulp.task('development', () => {
 	sequence(['lint', 'flow'], 'build_dev', (err) => {
 		if (err) {
 			log('Run Dev Failed');
+		}
+	});
+});
+
+gulp.task('docker', () => {
+	sequence(['lint', 'flow'], 'build_docker', (err) => {
+		if (err) {
+			log('Run Docker Failer');
 		}
 	});
 });

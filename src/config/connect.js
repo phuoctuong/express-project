@@ -15,6 +15,7 @@ const connect = async (callback) => {
 	try {
 		const config = configDB[env];
 		sequelize = new Sequelize(config.database, config.username, config.password, {
+			host: config.host,
 			dialect: config.dialect,
 			define: config.define,
 			logging: seqlizeLog,
