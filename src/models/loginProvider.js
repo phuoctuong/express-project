@@ -15,7 +15,7 @@ export default (sequelize, DataTypes) => {
 			field: 'social_id'
 		},
 		accessToken: {
-			type: DataTypes.STRING,
+			type: DataTypes.TEXT,
 			field: 'access_token'
 		},
 		refreshToken: {

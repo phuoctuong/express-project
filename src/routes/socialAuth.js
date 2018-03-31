@@ -20,7 +20,7 @@ passport.use(new FacebookStrategy({
 	try {
 		const { id, name, gender, emails, photos } = profile;
 
-		if (emails.length == 0) {
+		if (emails.length === 0) {
 			return done(null, false);
 		}
 
@@ -72,7 +72,7 @@ passport.use(new GoogleStrategy({
 	try {
 		const { id, name, gender, emails, photos } = profile;
 
-		if (emails.length == 0) {
+		if (emails.length === 0) {
 			return done(null, false);
 		}
 
@@ -128,19 +128,19 @@ router.get('/facebook/callback', passport.authenticate('facebook', {
 	res.status(200).json({
 		code: 200,
 		error: false,
+		message: 'Login Successfully',
 		data: {
-			...req.user,
-			message: 'Login Successfully'
+			...req.user
 		}
 	});
 });
 
 router.get('/facebook/callback_error', (req: Request, res: Response) => {
 	logger.error('Passport Facebook Callback Error');
-	res.status(401).json({
-		code: 401,
+	res.status(200).json({
+		code: 200,
 		error: true,
-		message: 'Authorization Failed'
+		message: 'Login Failed'
 	});
 });
 
@@ -155,20 +155,70 @@ router.get('/google/callback', passport.authenticate('google', {
 	res.status(200).json({
 		code: 200,
 		error: false,
+		message: 'Login Successfully',
 		data: {
-			...req.user,
-			message: 'Login Successfully'
+			...req.user
 		}
 	});
 });
 
 router.get('/google/callback_error', (req: Request, res: Response) => {
 	logger.error('Passport Google Callback Error');
-	res.status(401).json({
-		code: 401,
+	res.status(200).json({
+		code: 200,
 		error: true,
-		message: 'Authorization Failed'
+		message: 'Login Failed'
 	});
+});
+
+router.post('/profile', async (req: Request, res: Response) => {
+	logger.error('Profile Api Router: POST /profile');
+	try {
+		const userAccount = {
+			email: req.body.email,
+			UserProfile: {
+				firstName: req.body.firstName,
+				lastName: req.body.lastName,
+				gender: req.body.gender || null,
+				profileImg: req.body.profileImg
+			},
+			LoginProvider: {
+				socialId: req.body.id,
+				accessToken: req.body.accessToken,
+				refreshToken: req.body.refreshToken || null,
+				provider: req.body.provider
+			}
+		};
+		const rs = await userAccountDAO.findOrCreateSocial(userAccount, req.body.provider);
+		const token = signJWT({
+			id: rs[0].id,
+			provider: req.body.provider
+		});
+		const refToken = signJWT({
+			id: rs[0].id,
+			provider: req.body.provider
+		});
+
+		await rs[0].update({
+			token,
+			refreshToken: refToken
+		});
+		return res.status(200).json({
+			code: 200,
+			error: false,
+			data: {
+				token,
+				refreshToken: refToken
+			}
+		});
+	} catch (error) {
+		logger.error('Profile Api Router: POST /profile');
+		return res.status(200).json({
+			code: 200,
+			error: true,
+			message: 'Can\'t Save Profile'
+		});
+	}
 });
 
 export default router;

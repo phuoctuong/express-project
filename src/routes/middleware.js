@@ -1,9 +1,11 @@
 // @flow
 
+import { isEmpty } from 'lodash';
 import { verifyJWT } from '../helper/jwt';
+import { validateEmail, validatePassword, validateEmptyString } from '../helper/validate';
 import logger from '../helper/logger';
 
-const authMiddleware = (req: Request, res: Response, next: Next) => {
+export const authMiddleware = (req: Request, res: Response, next: Next) => {
 	logger.info('Auth Middleware');
 	try {
 		const auth = req.header('Authorization').split(' ');
@@ -24,4 +26,60 @@ const authMiddleware = (req: Request, res: Response, next: Next) => {
 	}
 };
 
-export { authMiddleware };
+export const validateFormMiddleware = (req: Request, res: Response, next: Next) => {
+	logger.info('Form Validation Middleware');
+	try {
+		const {
+			email = null,
+			password = null,
+			firstName = null,
+			lastName = null
+		} = req.body;
+		const validation = {};
+
+		if (email !== null && !validateEmail(email)) {
+			validation.email = {
+				messages: ['It is not a valid email']
+			};
+		}
+
+		if (password !== null && !validatePassword(password)) {
+			validation.password = {
+				messages: [
+					'It is at least 8 letters',
+					'Must contain at least 1 uppercase letter, 1 lowercase letter and 1 number',
+					'Must contain at least special character'
+				]
+			};
+		}
+
+		if (firstName !== null && !validateEmptyString(firstName)) {
+			validation.firstName = {
+				messages: ['It is not empty string']
+			};
+		}
+
+		if (lastName !== null && !validateEmptyString(lastName)) {
+			validation.lastName = {
+				messages: ['It is not empty string']
+			};
+		}
+
+		if (!isEmpty(validation)) {
+			return res.status(200).json({
+				code: 200,
+				error: true,
+				data: validation
+			});
+		}
+		next();
+	} catch (error) {
+		logger.error(`Form Validation Middleware ${error.toString()}`);
+		return res.status(200).json({
+			code: 200,
+			error: true,
+			message: 'Validate Form Failed'
+		});
+	}
+};
+

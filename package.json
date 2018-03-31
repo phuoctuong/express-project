@@ -17,6 +17,7 @@
     "testRegex": "(/__tests__/.*|(\\.|/)(spec))\\.js?$"
   },
   "scripts": {
+    "dev:migrate": "sequelize db:migrate --env development",
     "dev": "gulp development",
     "predocker": "sequelize db:migrate --env docker",
     "docker": "gulp docker",
@@ -79,6 +80,7 @@
     "jquery": "^3.2.1",
     "jsonwebtoken": "^8.1.0",
     "lodash": "^4.17.4",
+    "nodemailer": "^4.6.3",
     "passport": "^0.4.0",
     "passport-facebook": "^2.1.1",
     "passport-google-oauth": "^1.0.0",
