@@ -22,7 +22,7 @@ router.get('/me', authMiddleware, async (req: Request, res: Response) => {
 		res.status(500).json({
 			code: 500,
 			error: true,
-			message: 'Interval Server Error'
+			message: 'Get Profile Failed'
 		});
 	}
 });

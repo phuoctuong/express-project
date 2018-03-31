@@ -71,6 +71,25 @@ userAccountDAO.update = (value: Object, where: Object) => {
 	});
 };
 
+userAccountDAO.findOrCreate = (userAccount: UserAccount) => {
+	return sequelize.transaction((trans) => {
+		return new Promise((resolve, reject) => {
+			models.userAccount.findOrCreate({
+				where: {
+					email: userAccount.email
+				},
+				defaults: userAccount,
+				include: [{
+					model: models.userProfile,
+					as: 'UserProfile'
+				}]
+			})
+				.then(result => resolve(result))
+				.catch(error => reject(error));
+		});
+	});
+};
+
 userAccountDAO.findOrCreateSocial = (userAccount: UserAccount, provider: ProviderType) => {
 	return sequelize.transaction((trans) => {
 		return new Promise((resolve, reject) => {

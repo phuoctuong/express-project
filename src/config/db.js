@@ -50,7 +50,7 @@ const config = {
 		password: process.env.DB_PASSWORD,
 		dialect: process.env.DB_DIALECT,
 		database: `${process.env.DB_NAME}_docker`,
-		host: 'db',
+		host: '127.0.0.1',
 		define: {
 			freezeTableName: true,
 			timestamps: true,

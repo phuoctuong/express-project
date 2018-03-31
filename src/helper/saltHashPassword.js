@@ -24,7 +24,7 @@ const encrypt = (data: string) => {
 
 const decrypt = (data: string, key: string) => {
 	const decipher = crypto.createDecipher(algorithm, key);
-	let decrypted = decipher.update(data, 'base64', 'utf8');
+	let decrypted = decipher.update(data, 'hex', 'utf8');
 	decrypted += decipher.final('utf8');
 	return decrypted;
 };
