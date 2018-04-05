@@ -74,8 +74,12 @@ router.post('/login', async (req: Request, res: Response) => {
 		if (pwd !== req.body.password) {
 			return res.status(200).json({
 				code: 200,
-				error: true,
-				message: 'Password Is Incorrect'
+				error: false,
+				data: {
+					password: {
+						message: 'Password Is Incorrect'
+					}
+				}
 			});
 		}
 
@@ -104,8 +108,10 @@ router.post('/login', async (req: Request, res: Response) => {
 		logger.error(`Auth Router: POST /login ${error.toString()}`);
 		return res.status(401).json({
 			code: 200,
-			error: true,
-			message: 'Email Or Password Invalid'
+			error: false,
+			data: {
+				email: 'Email Is Incorrect'
+			}
 		});
 	}
 });
