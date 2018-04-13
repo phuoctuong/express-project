@@ -38,31 +38,21 @@ export const validateFormMiddleware = (req: Request, res: Response, next: Next) 
 		const validation = {};
 
 		if (email !== null && !validateEmail(email)) {
-			validation.email = {
-				messages: ['It is not a valid email']
-			};
+			validation.email = ['It is not a valid email'];
 		}
 
 		if (password !== null && !validatePassword(password)) {
-			validation.password = {
-				messages: [
-					'It is at least 8 letters',
-					'Must contain at least 1 uppercase letter, 1 lowercase letter and 1 number',
-					'Must contain at least special character'
-				]
-			};
+			validation.password = ['It is at least 8 letters',
+				'Must contain at least 1 uppercase letter, 1 lowercase letter and 1 number',
+				'Must contain at least special character'];
 		}
 
 		if (firstName !== null && !validateEmptyString(firstName)) {
-			validation.firstName = {
-				messages: ['It is not empty string']
-			};
+			validation.firstName = ['It is not empty string'];
 		}
 
 		if (lastName !== null && !validateEmptyString(lastName)) {
-			validation.lastName = {
-				messages: ['It is not empty string']
-			};
+			validation.lastName = ['It is not empty string'];
 		}
 
 		if (!isEmpty(validation)) {
