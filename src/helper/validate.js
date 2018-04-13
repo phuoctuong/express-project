@@ -12,5 +12,5 @@ export const validatePassword = (password: string): boolean => {
 };
 
 export const validateEmptyString = (str: string): boolean => {
-	return str.length >= 0;
+	return str.length > 0;
 };

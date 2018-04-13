@@ -74,11 +74,9 @@ router.post('/login', async (req: Request, res: Response) => {
 		if (pwd !== req.body.password) {
 			return res.status(200).json({
 				code: 200,
-				error: false,
+				error: true,
 				data: {
-					password: {
-						message: 'Password Is Incorrect'
-					}
+					password: 'Password Is Incorrect'
 				}
 			});
 		}
@@ -106,9 +104,9 @@ router.post('/login', async (req: Request, res: Response) => {
 		});
 	} catch (error) {
 		logger.error(`Auth Router: POST /login ${error.toString()}`);
-		return res.status(401).json({
+		return res.status(200).json({
 			code: 200,
-			error: false,
+			error: true,
 			data: {
 				email: 'Email Is Incorrect'
 			}
@@ -136,7 +134,9 @@ router.post('/signup', validateFormMiddleware, async (req: Request, res: Respons
 			return res.status(200).json({
 				code: 200,
 				error: true,
-				message: 'Email Is Existed'
+				data: {
+					email: 'Email Is Existed'
+				}
 			});
 		}
 		return res.status(200).json({
@@ -156,7 +156,9 @@ router.post('/signup', validateFormMiddleware, async (req: Request, res: Respons
 		return res.status(200).json({
 			code: 200,
 			error: true,
-			message
+			data: {
+				email: message
+			}
 		});
 	}
 });
@@ -183,7 +185,6 @@ router.post('/lost-password', async (req: Request, res: Response) => {
 					pass: process.env.GMAIL_PASS
 				}
 			});
-
 			const mailOptions = {
 				from: process.env.GMAIL_USER,
 				to: receiver,
@@ -196,13 +197,14 @@ router.post('/lost-password', async (req: Request, res: Response) => {
 					return res.status(200).json({
 						code: 200,
 						error: true,
-						data: err
+						data: {
+							email: 'Server Can\'t Send Email'
+						}
 					});
 				}
-
 				return res.status(200).json({
 					code: 200,
-					error: true,
+					error: false,
 					data: {
 						token: pwdReminderToken
 					}
@@ -212,7 +214,9 @@ router.post('/lost-password', async (req: Request, res: Response) => {
 			return res.status(200).json({
 				code: 200,
 				error: true,
-				message: 'Email Is Not Registered'
+				data: {
+					email: 'Email Is Not Registered'
+				}
 			});
 		}
 	} catch (error) {
@@ -220,7 +224,9 @@ router.post('/lost-password', async (req: Request, res: Response) => {
 		return res.status(200).json({
 			code: 200,
 			error: true,
-			message: 'Can\'t Send Email'
+			data: {
+				email: 'Can\'t Send Email'
+			}
 		});
 	}
 });
