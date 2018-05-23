@@ -1,26 +1,59 @@
+// @flow
+
 import express from 'express';
-import log from './helper/log';
+import passport from 'passport';
+import bodyParser from 'body-parser';
+import http from 'http';
+import log from 'fancy-log';
 import connect from './config/connect';
+import io from './socket';
+import {
+	authRouter,
+	socialRouter,
+	userRouter,
+	postRouter
+} from './routes';
 
 const app = express();
+const server = http.createServer(app);
 
-app.get('/', (req, res) => {
-	res.send('Welcome to Express Server');
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(passport.initialize());
+
+app.use('/auth', authRouter, socialRouter);
+app.use('/api/users', userRouter);
+app.use('/api/posts', postRouter);
+
+app.get('/', (req: Request, res: Response) => {
+	res.send('Welcome to our app');
 });
 
 // Handle Error
-app.get('*', (req, res, next) => {
-	const err = new Error();
-	err.status(404);
-	next(err);
-});
-
-app.use((err, req, res, next) => {
+app.get('*', (req: Request, res: Response) => {
 	res.status(404).json({
+		code: 404,
 		error: true,
-		data: {
-			message: err.message || 'Something broken'
-		}
+		message: 'Not Found'
 	});
 });
-connect(() => app.listen(8080, log.info('Listening port 8080')));
+
+app.use((err: ErrorType, req: Request, res: Response, next: Next) => {
+	const code = err.status || 500;
+	res.status(code).json({
+		code,
+		erorr: true,
+		message: err.message || 'Something broken'
+	});
+});
+
+if (process.env.NODE_ENV !== 'test') {
+	connect(() => {
+		io.listen(server);
+		server.listen(8080, () => {
+			log('Listening server port 8080');
+		});
+	});
+}
+
+export default app;
