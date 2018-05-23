@@ -1,4 +1,11 @@
 ./dist/**/*.js
+
+/src/flow-typed/*
+
+/__tests__/*
+
 /node_modules/*
+
 package.json
+
 README.md
