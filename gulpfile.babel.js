@@ -1,89 +1,40 @@
-const gulp = require('gulp'),
-	plumber = require('gulp-plumber'),
-	nodemon = require('gulp-nodemon'),
-	babel = require('gulp-babel'),
-	eslint = require('gulp-eslint'),
-	log = require('fancy-log'),
-	clean = require('gulp-clean'),
-	flow = require('gulp-flowtype'),
-	sequence = require('gulp-sequence');
-const path = require('path');
+const gulp = require('gulp');
+const babel = require('gulp-babel');
+const sourcemaps = require('gulp-sourcemaps');
+const eslint = require('gulp-eslint');
+const clean = require('gulp-clean');
+const nodemon = require('gulp-nodemon');
+const sequence = require('gulp-sequence');
 
-const paths = {
-	es6: ['src/**/*.js'],
-	sourceRoot: path.join(__dirname, 'src')
-};
+gulp.task('lint', () => {
+	return gulp.src('src/**/*.js')
+		.pipe(eslint())
+		.pipe(eslint.format());
+});
+
+gulp.task('watch-lint-flow', ['lint'], () => {
+	gulp.watch('src/**/*.js', ['lint']);
+});
+
+gulp.task('dev', ['watch-lint-flow'], () => {
+	nodemon({
+		script: 'src/app.js',
+		exec: './node_modules/.bin/babel-node',
+		watch: 'src/**/*.js'
+	});
+});
 
 gulp.task('clean', () => {
 	return gulp.src('./dist', { read: false })
 		.pipe(clean());
 });
 
-gulp.task('lint', () => {
-	return gulp.src(paths.es6)
-		.pipe(plumber({
-			errorHandler: function handler(error) {
-				this.emit('end');
-			}
-		}))
-		.pipe(eslint())
-		.pipe(eslint.format())
-		.pipe(eslint.failAfterError());
-});
-
-gulp.task('flow', () => {
-	return gulp.src(paths.es6)
-		.pipe(flow({
-			killFlow: false,
-			declarations: './src/flow-typed'
-		}));
-});
-
-gulp.task('scripts', ['lint', 'flow'], () => {
-	return gulp.src(paths.es6)
+gulp.task('build', ['clean'], () => {
+	return gulp.src('src/**/*.js')
+		.pipe(sourcemaps.init())
 		.pipe(babel())
-		.pipe(gulp.dest('dist'));
+		.pipe(sourcemaps.write('.'))
+		.pipe(gulp.dest('build'));
 });
 
-gulp.task('build_prod', ['clean', 'scripts']);
-gulp.task('build_dev', () => {
-	nodemon({
-		script: 'src/app.js',
-		exec: './node_modules/.bin/babel-node',
-		env: { NODE_ENV: 'development' },
-		watch: paths.es6,
-		tasks: ['lint', 'flow']
-	});
-});
-
-gulp.task('build_docker', () => {
-	nodemon({
-		script: 'src/app.js',
-		exec: './node_modules/.bin/babel-node',
-		env: { NODE_ENV: 'docker' },
-		watch: paths.es6,
-		tasks: ['lint', 'flow']
-	});
-});
-
-gulp.task('production', ['build_prod'], () => {
-	log('Bundle Successfully');
-});
-
-gulp.task('development', () => {
-	sequence(['lint', 'flow'], 'build_dev', (err) => {
-		if (err) {
-			log('Run Dev Failed');
-		}
-	});
-});
-
-gulp.task('docker', () => {
-	sequence(['lint', 'flow'], 'build_docker', (err) => {
-		if (err) {
-			log('Run Docker Failer');
-		}
-	});
-});
-
-gulp.task('default', ['production']);
+gulp.task('production', sequence(['lint'], 'build'));

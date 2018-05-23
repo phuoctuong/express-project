@@ -1,4 +1,25 @@
-const auth = {
+// @flow
+
+type SocialType = {
+	clientID: string,
+	clientSecret: string,
+	callbackURL: string,
+	profileFields?: string[]
+};
+
+type BasicType = {
+	secretOrKey: string,
+	expiresIn: string,
+	algorithm: jwt$Algorithm
+};
+
+type AuthType = {
+	basicAuth: BasicType,
+	googleAuth: SocialType,
+	facebookAuth: SocialType
+};
+
+const auth: AuthType = {
 	basicAuth: {
 		secretOrKey: 'estore',
 		algorithm: 'HS256',

@@ -4,7 +4,7 @@ import express from 'express';
 import passport from 'passport';
 import bodyParser from 'body-parser';
 import http from 'http';
-import log from 'fancy-log';
+import log from './helper/log';
 import connect from './config/connect';
 import io from './socket';
 import {
@@ -38,7 +38,7 @@ app.get('*', (req: Request, res: Response) => {
 	});
 });
 
-app.use((err: ErrorType, req: Request, res: Response, next: Next) => {
+app.use((err: ErrorType, req: Request, res: Response) => {
 	const code = err.status || 500;
 	res.status(code).json({
 		code,
@@ -51,7 +51,7 @@ if (process.env.NODE_ENV !== 'test') {
 	connect(() => {
 		io.listen(server);
 		server.listen(8080, () => {
-			log('Listening server port 8080');
+			log.info('Listening server port 8080');
 		});
 	});
 }

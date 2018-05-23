@@ -1,0 +1,1 @@
+{"version":3,"sources":["test/index.js"],"names":["rs","obj","a","b","console","log"],"mappings":";;;;;;AAAA;;;;;;AAEA,IAAMA,KAAK,mBAAIC,SAAIC,CAAR,EAAWD,SAAIE,CAAf,CAAX;AACAC,QAAQC,GAAR,CAAY,IAAZ,EAAkBL,EAAlB;;kBAEeA,E","file":"index.js","sourcesContent":["import add, { obj } from './add';\n\nconst rs = add(obj.a, obj.b);\nconsole.log('RS', rs);\n\nexport default rs;"]}

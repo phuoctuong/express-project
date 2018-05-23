@@ -1,10 +1,6 @@
 {
 	"presets":[
-		["env", {
-			"targets":{
-				"node":"current"
-			}
-		}],
+		"env",
 		"latest",
 		"es2015",
 		"stage-2",

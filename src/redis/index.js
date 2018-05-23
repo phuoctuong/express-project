@@ -12,6 +12,7 @@ if (!redisClient) {
 		port: config.redis.port
 	});
 
+	// $FlowFixMe
 	redisClient.auth(config.redis.password, (err) => {
 		if (err) {
 			logger.error(`Error Auth in Redis ${err}`);

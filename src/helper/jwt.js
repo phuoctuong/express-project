@@ -12,11 +12,14 @@ const signJWT = (obj: any, expiresTime: string = auth.basicAuth.expiresIn) => {
 	});
 };
 
-const verifyJWT = (token: string) => {
+const verifyJWT = (token: string): any => {
 	const decode = jwt.verify(token, auth.basicAuth.secretOrKey, {
-		algorithm: auth.basicAuth.algorithm
+		algorithms: [auth.basicAuth.algorithm]
 	});
-	return decode.data;
+	if (typeof decode === 'object') {
+		return decode && decode.data;
+	}
+	return null;
 };
 
 export { signJWT, verifyJWT };
