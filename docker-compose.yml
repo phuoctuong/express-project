@@ -1,0 +1,20 @@
+version: "3"
+services:
+  db:
+    image: postgres:9.4
+    ports:
+     - "35432:5432" 
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123456
+      POSTGRES_DB: express_project_docker
+  web:
+    build: .
+    ports:
+      - "38080:8080"
+    volumes:
+      - .:/express-project
+    env_file: .env
+    depends_on:
+      - db
+    command: "./wait-for-it.sh db:5432 -- npm run docker" 

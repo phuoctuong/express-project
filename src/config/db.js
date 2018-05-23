@@ -1,6 +1,11 @@
 require('dotenv').config();
 
 const config = {
+	redis: {
+		password: process.env.REDIS_PASSWORD,
+		host: 'localhost',
+		port: 6379
+	},
 	development: {
 		username: process.env.DB_USERNAME,
 		password: process.env.DB_PASSWORD,
@@ -11,7 +16,7 @@ const config = {
 			freezeTableName: true,
 			timestamps: true,
 			paranoid: true,
-			underscore: true
+			underscored: true
 		}
 	},
 	test: {
@@ -24,7 +29,7 @@ const config = {
 			freezeTableName: true,
 			timestamps: true,
 			paranoid: true,
-			underscore: true
+			underscored: true
 		}
 	},
 	production: {
@@ -37,9 +42,22 @@ const config = {
 			freezeTableName: true,
 			timestamps: true,
 			paranoid: true,
-			underscore: true
+			underscored: true
+		}
+	},
+	docker: {
+		username: process.env.DB_USERNAME,
+		password: process.env.DB_PASSWORD,
+		dialect: process.env.DB_DIALECT,
+		database: `${process.env.DB_NAME}_docker`,
+		host: '127.0.0.1',
+		define: {
+			freezeTableName: true,
+			timestamps: true,
+			paranoid: true,
+			underscored: true
 		}
 	}
 };
 
-export default config;
+module.exports = config;
